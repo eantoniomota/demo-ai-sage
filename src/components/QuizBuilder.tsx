@@ -90,13 +90,27 @@ async function generateQuizWithGPT(
     throw new Error('GPT Token is missing!');
   }
 
-  const systemPrompt = `Tu es un générateur de quiz. 
-    L'utilisateur te fournit un texte PDF. 
-    Crée un quiz de difficulté ${quizParams.difficulty}, 
+  const systemPrompt = `Tu es un expert en création de quiz professionnels pour la formation continue. 
+    L'utilisateur te fournit un plan de formation au format PDF. 
+    Crée un quiz professionnel de difficulté ${quizParams.difficulty}, 
     avec ${quizParams.questionCount} questions maximum, 
     chaque question ayant un type (courte, longue, note5). 
-    Retourne un JSON strict avec un champ "title" et un champ "questions". 
-    Chaque question a: id, title, description, type.`;
+    
+    Les questions doivent :
+    - Être directement liées aux objectifs pédagogiques du plan de formation
+    - Évaluer la compréhension des concepts clés
+    - Tester l'application pratique des connaissances
+    - Mesurer la capacité à résoudre des problèmes professionnels
+    
+    Retourne un JSON strict avec :
+    - Un champ "title" : le titre du quiz basé sur le thème de la formation
+    - Un champ "questions" : chaque question doit avoir :
+      * id : identifiant unique
+      * title : la question formulée de manière professionnelle
+      * description : contexte ou précisions nécessaires
+      * type : le format de réponse attendu
+      * learningObjective : l'objectif pédagogique visé
+      * difficulty : le niveau de difficulté (débutant, intermédiaire, avancé)`;
 
   const userContent = `CONTENU PDF: ${pdfText}`;
 
@@ -237,7 +251,7 @@ const QuizBuilder: React.FC = () => {
   return (
     <Container style={{ marginTop: 20 }}>
       <Typography variant="h4" gutterBottom>
-        Créateur de Quiz (Drag & Drop) - Hervé ANTONIO-MOTA
+        Créateur de Quiz (Drag & Drop) - Hervé ANTONIO-MOTA - Sage
       </Typography>
 
       {/* Jeton GPT */}
